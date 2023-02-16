@@ -34,6 +34,8 @@ class AggregationController extends Controller
                 ->get(),
 
             'majorities' => Majority::Select( 'event_id','user_id','point')
+                ->join('users','users.id', '=', 'majorities.user_id')
+                ->where('users.delete_flg', '=', 0)
                 ->orderByRaw('event_id, user_id')
                 ->get(),
 
@@ -44,6 +46,8 @@ class AggregationController extends Controller
 
             'total_points' => TotalPoint::Select( 'event_id','question_id','user_id')
                 ->selectRaw('ROUND(point,2) AS point')
+                ->join('users','users.id', '=', 'total_points.user_id')
+                ->where('users.delete_flg', '=', 0)
                 ->orderByRaw('event_id,question_id,user_id')
                 ->get(),
 
@@ -62,6 +66,8 @@ class AggregationController extends Controller
 
             'sum_total_points' => TotalPoint::Select( 'event_id','user_id')
                 ->selectRaw('ROUND(SUM(point),0) AS point')
+                ->join('users','users.id', '=', 'total_points.user_id')
+                ->where('users.delete_flg', '=', 0)
                 ->Groupby('event_id', 'user_id')
                 ->orderByRaw('event_id, user_id')
                 ->get(),
@@ -73,6 +79,8 @@ class AggregationController extends Controller
                     ->whereColumn('event_id','total_points.event_id')
                     ->whereColumn('user_id','total_points.user_id')
                 ])
+                    ->join('users','users.id', '=', 'total_points.user_id')
+                    ->where('users.delete_flg', '=', 0)
                     ->where('user_id', '!=', 0)
                     ->groupBy('event_id','user_id')
                     ->orderByRaw('event_id, user_id')
