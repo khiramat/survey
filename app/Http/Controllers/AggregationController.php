@@ -193,6 +193,24 @@ SQL;
         $result_majority_point_sql = DB::select($insert_majority_point);
 
 
+        $userid_majority_sql = <<< SQL
+SELECT users.id FROM users
+left join (select user_id, point from majorities where event_id = ?) AS m_user
+on users.id = m_user.user_id
+WHERE users.id >= 6
+AND point is null
+SQL;
+        $userid_majority_ary = DB::select($userid_majority_sql, $bind_pram);
+
+        foreach ($userid_majority_ary as $userid) {
+            Majority::create([
+                'event_id' => $event_id,
+                'user_id' => $userid->id,
+                'point' => 0
+            ]);
+        }
+
+
         $stddev_sql = <<< SQL
 SELECT
     ROUND(STDDEV(total_point),0) AS STDDEV
@@ -228,22 +246,6 @@ SQL;
                 'end_flg' => 1,
             ]);
 
-        $userid_majority_sql = <<< SQL
-SELECT users.id FROM users
-left join (select user_id, point from majorities where event_id = ?) AS m_user
-on users.id = m_user.user_id
-WHERE users.id >= 6
-AND point is null
-SQL;
-        $userid_majority_ary = DB::select($userid_majority_sql, $bind_pram);
-
-        foreach ($userid_majority_ary as $userid) {
-            Majority::create([
-                'event_id' => $event_id,
-                'user_id' => $userid->id,
-                'point' => 0
-            ]);
-        }
 
         $message = '集計が完了しました。一旦このページをリロードしてください。';
         return redirect()->route('aggregation')->with('message', $message);

@@ -40,24 +40,6 @@ function event_end_flg() {
         const open_event_id = props.opening_event[0].id
         const open_event_date = props.opening_event[0].event_date
 
-/*
-        const answers_ary = props.check_event_end.filter((u) => u.event_id === open_event_id); // 選択された実施年月で連想配列から対象レコードを選択
-        console.log(answers_ary)
-        if(answers_ary.length !== 0){
-            const answered_number = answers_ary[0].record_num
-            console.log(answered_number)
-            const answer_number = user_numbers * (user_numbers - 1) * 20
-            console.log(answer_number)
-            if (answered_number == answer_number) {
-                var end_flg = true
-            } else {
-                var end_flg = false
-            }
-            return [end_flg, open_event_id, open_event_date]
-        } else {
-            return false
-        }
-*/
         return [open_event_id, open_event_date]
     } else {
         return false

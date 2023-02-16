@@ -88,12 +88,18 @@ function total_points_company(event_id) {
     return all_total_point_ary
 };
 
+const hyoujun_hensa = hensa(props.selectValue);
+function hensa(event_id) {
+    const event_ary = props.events.filter((u) => u.id === event_id);
+    return event_ary[0].stdev
+};
+
+
 const stddev_ary = stddev_array();
 function stddev_array() {
     var last_obj = [];
     Object.keys(total_additions).forEach(function (key) {
         const val = this[key];
-        const result_array = val.total_point
         last_obj.push(val.total_point);
     },total_additions);
     return last_obj
@@ -123,6 +129,7 @@ function total_point_ranking() {
 
 
 // 標準偏差の計算
+/*
 const stdev = Math.round(calcStd(stddev_ary))
 function calcStd(data) {
     const variance = arr => {
@@ -132,6 +139,7 @@ function calcStd(data) {
     const stdev = arr => Math.sqrt(variance(arr));
     return stdev(data);    // 分散の平方根
 }
+*/
 
 const company_total = Number(total_avg_point) + Number(majority_company_points[0].avg_point);
 
@@ -207,10 +215,10 @@ const company_total = Number(total_avg_point) + Number(majority_company_points[0
             </tr>
             <tr>
                 <td style="text-align: right">偏差値（全社平均は標準偏差）</td>
-                <td style="text-align: right; background-color: #d4fcd7; font-weight: bold;">{{ stdev }}</td>
+                <td style="text-align: right; background-color: #d4fcd7; font-weight: bold;">{{ hyoujun_hensa }}</td>
                 <td v-for="stddevs in stddev_ary" :key="stddev_ary"
                     style="text-align: right; font-weight: bold; background-color: #90d285; color: white">
-                    {{ Math.round((stddevs - company_total) / stdev * 10 + 50) }}
+                    {{ Math.round((stddevs - company_total) / hyoujun_hensa * 10 + 50) }}
                 </td>
                 <!-- 偏差値＝（個人の得点-平均点）/ 標準偏差 × 10 + 50 -->
             </tr>

@@ -141,16 +141,25 @@ function stddev(id){
         const total_avg_ary = total_summary.filter((a) => a.event_id === event.id);
         const total_avg = total_avg_ary[0].total_avg;
         const total_addition_ary = props.total_addition.filter((u) => u.user_id === id && u.event_id === event.id);
-        Object.keys(total_addition_ary).forEach(function(key) {
-            const val = this[key];
-            const total_point_addition = val.mvv_point + val.maj_point
+        if(Object.values(total_addition_ary).length > 0){
+            Object.keys(total_addition_ary).forEach(function(key) {
+                const val = this[key];
+                const total_point_addition = val.mvv_point + val.maj_point
+                const result_array = {
+                    'total': total_point_addition,
+                    'stddev': stdev,
+                    'total_avg': total_avg
+                };
+                total_obj.push(result_array);
+            }, total_addition_ary);
+        } else {
             const result_array = {
-                'total': total_point_addition,
-                'stddev': stdev,
-                'total_avg': total_avg
+                'total': '',
+                'stddev': '',
+                'total_avg': ''
             };
             total_obj.push(result_array);
-        }, total_addition_ary);
+        }
     }, props.events);
     return total_obj;
 };
