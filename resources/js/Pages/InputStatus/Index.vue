@@ -13,10 +13,34 @@ const answer_num = user_num * 20;
 //console.log(props.user_num)
 //console.log(props.opening_event)
 
-if(Object.values(props.opening_event).length !== 0){
-    var survey_year = props.opening_event[0].event_date.split('-')[0];
-    var survey_month = props.opening_event[0].event_date.split('-')[1];
-    var survey_num = props.opening_event[0].id + 1;
+const survey_year = survey_years();
+function survey_years(){
+    if(Object.values(props.opening_event).length !== 0){
+        var result = props.opening_event[0].event_date.split('-')[0];
+    } else {
+        result = null;
+    }
+    return result
+}
+
+const survey_month = survey_months();
+function survey_months(){
+    if(Object.values(props.opening_event).length !== 0){
+        var result = props.opening_event[0].event_date.split('-')[1];
+    } else {
+        result = null;
+    }
+    return result
+}
+
+const survey_num = survey_nums();
+function survey_nums(){
+    if(Object.values(props.opening_event).length !== 0){
+        var result = props.opening_event[0].id + 1;
+    } else {
+        result = null;
+    }
+    return result
 }
 
 
@@ -26,14 +50,16 @@ if(Object.values(props.opening_event).length !== 0){
     <Head title="イベント回答状況"/>
     <AuthenticatedLayout>
         <template #header>
-            <h2 v-if="survey_year" class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 v-if="Object.values(props.opening_event).length !== 0" class="font-semibold text-xl text-gray-800 leading-tight">
                 {{survey_year}}年{{survey_month}}月（第{{survey_num}}回）の回答状況
             </h2>
+
             <h2 v-else class="font-semibold text-xl text-gray-800 leading-tight">
                 開催中のサーベイはありません。
             </h2>
+
         </template>
-        <div v-if="survey_year" class="py-12">
+        <div v-if="Object.values(props.opening_event).length !== 0" class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <table class="table table-bordered text-nowrap" style="width: 20%">

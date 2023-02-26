@@ -18,7 +18,7 @@ class InputStatusController extends Controller
 {
     public function index(){
 
-        $sql = <<< SQL
+/*        $sql = <<< SQL
 SELECT id, name, count
 FROM  users
 LEFT JOIN (
@@ -29,12 +29,13 @@ LEFT JOIN (
     ) AS answer
 ON users.id = answer.user_id
 WHERE id >2
+AND delete_flg = 0
 ORDER BY id ASC;
 SQL;
-        $result = DB::select($sql);
+        $result = DB::select($sql);*/
 
         return Inertia::render('InputStatus/Index',[
-            'inputs' => $result,
+//            'inputs' => $result,
 
             'user_num' => User::selectRaw('COUNT(*) AS user_num')
                 ->Where('delete_flg','=', 0)
@@ -46,6 +47,12 @@ SQL;
                 ->Where('opening_flg','=', 1)
                 ->get(),
 
+            'inputs' => User::select('users.id', 'users.name', 'answer.count')
+                ->leftJoin(DB::raw('(SELECT `user_id`, COUNT(*) AS count FROM `answers` WHERE `event_id` = (SELECT id FROM events WHERE opening_flg = 1 AND delete_flg = 0) GROUP BY `user_id`) AS answer'), 'users.id', '=', 'answer.user_id')
+                ->where('users.id', '>', 2)
+                ->where('users.delete_flg', '=', 0)
+                ->orderBy('users.id', 'asc')
+                ->get(),
         ]);
     }
 }
