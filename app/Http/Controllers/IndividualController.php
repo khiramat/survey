@@ -64,7 +64,7 @@ class IndividualController extends Controller
                     ->orderByRaw('event_id, user_id')
                     ->get(),
 
-            'users' => User::Where('admin_flg','=', 0)
+            'users' => User::Where('id','>=', 6)
                 ->Where('delete_flg','=', 0)
                 ->orderbyRaw('id')
                 ->get(),

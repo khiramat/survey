@@ -167,15 +167,25 @@ function stddev(id){
 //////////////////////////////////////////////////////////////////////////
 // グラフデータ
 //////////////////////////////////////////////////////////////////////////
-const graph_y = ['2022-9', '2022-10', '2022-11', '2022-12', '2023-1', '2023-2', '2023-3', '2023-4', '2023-5', '2023-6', '2023-7', '2023-8', ]
+const graph_y = ['2022-10', '2022-11', '2022-12', '2023-1', '2023-2', '2023-3', '2023-4', '2023-5', '2023-6', '2023-7', '2023-8', '2023-9']
 const sum_graph_ary = props.total_addition.filter((u) => u.user_id === selectedEventId);
 const sum_graphs = sum_graph();
 function sum_graph(){
     var total_obj = [];
-    Object.keys(sum_graph_ary).forEach(function(key) {
-        const val = this[key];
-        total_obj.push(val.mvv_point + val.maj_point);
-    }, sum_graph_ary);
+    Object.keys(props.events).forEach(function(key) {
+        const event = this[key];
+        const sum_mvv = sum_graph_ary.filter((a) => a.event_id === event.id);
+        if(Object.values(sum_mvv).length > 0){
+            Object.keys(sum_mvv).forEach(function(key) {
+                const val = this[key];
+                const result_value = val.mvv_point + val.maj_point;
+                total_obj.push(result_value);
+            }, sum_mvv);
+        } else {
+            const result_value = null;
+            total_obj.push(result_value);
+        }
+    }, props.events);
     return total_obj;
 };
 
@@ -230,10 +240,10 @@ let chartOptions = {
 <template>
     <table>
         <thead>
-        <tr style="background-color: #00005a; color: white">
-            <th>No.</th>
-            <th>質問</th>
-            <th style="background-color: #00005a; color: white" v-for="(event, index) in events">{{ event.event_date.split('-')[1] }}/1/{{ event.event_date.split('-')[0] }}</th>
+        <tr style="background-color: #00005a; color: white;">
+            <th style="border-right: white solid 1px;">No.</th>
+            <th style="border-right: white solid 1px;">質問</th>
+            <th style="background-color: #00005a; color: white; border-right: white solid 1px;" v-for="(event, index) in events">{{ event.event_date.split('-')[0] }}/{{ event.event_date.split('-')[1] }}</th>
         </tr>
         </thead>
         <tbody>

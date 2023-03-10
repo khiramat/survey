@@ -69,7 +69,7 @@ for (var i = 0; i < total_avg_point.length; i++) {
 //////////////////////////////////////////////////////////////////////////
 // グラフデータ
 //////////////////////////////////////////////////////////////////////////
-const graph_y = ['2022-9', '2022-10', '2022-11', '2022-12', '2023-1', '2023-2', '2023-3', '2023-4', '2023-5', '2023-6', '2023-7', '2023-8', ]
+const graph_y = ['2022-10', '2022-11', '2022-12', '2023-1', '2023-2', '2023-3', '2023-4', '2023-5', '2023-6', '2023-7', '2023-8', '2023-9', ]
 
 import { Line } from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, LinearScale, PointElement, CategoryScale } from 'chart.js'
@@ -106,7 +106,7 @@ let chartOptions = {
         <tr style="background-color: #00005a; color: white">
             <th>No.</th>
             <th>質問</th>
-            <th style="background-color: #00005a; color: white; white-space: nowrap" v-for="(event, index) in events">{{ event.event_date.split('-')[1] }}/1/{{ event.event_date.split('-')[0] }}</th>
+            <th style="background-color: #00005a; color: white; white-space: nowrap" v-for="(event, index) in events">{{ event.event_date.split('-')[0] }}/{{ event.event_date.split('-')[1] }}</th>
         </tr>
         </thead>
         <tbody>
